@@ -146,7 +146,7 @@
 
 <div id="app">
   <input type="text" class="form-control" v-model="text">
-  <button class="btn btn-primary mt-1">反轉字串</button>
+  <a :href="link" class="btn btn-primary mt-1" @click.prevent="reverseText">反轉字串</a>
   <div class="mt-3">
     {{ newText }}
   </div>
@@ -157,16 +157,29 @@ var app = new Vue({
   el: '#app',
   data: {
     text: '',
-    newText: ''
+    newText: '',
+    link: 'https://www.google.com.tw/'
   },
   methods: {
-    reverseText() {
+    reverseText:function() {
       console.log(this.text);
       this.newText = this.text.split('').reverse().join('');
     }
   }
 });
 </script>
+<!-- 事件修飾
+v-on:click.prevent=“ methods 內的 物件名稱 ”
+
+//Vue 內 v-on 後面加修飾符 .prevent
+.prevent == function functionName(e){
+        //取消預設行為
+        event.preventDefault( );
+      }
+EX :
+若此事件是轉寫在 <a> 標籤內，則會取消<a>標籤原本會轉址刷新頁面的預設行為
+下面函式原本會因為 href=“ # ” 刷新頁面,在 v-on:click 後加入 .prevent 就可以＊— 取消頁面刷新同時執行 reverseText 的事件 —＊ -->
+
  
         </div>
       </div>

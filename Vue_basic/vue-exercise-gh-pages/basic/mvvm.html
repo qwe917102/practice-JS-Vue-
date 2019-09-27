@@ -148,7 +148,9 @@
 
 
 <div id="app">
-  <input type="text">
+  <div v-html="message2"></div>
+  <div v-text="message"></div>
+  <input type="text" v-model="message">
 </div>
 
 <script>
@@ -156,10 +158,22 @@ var app = new Vue({
   el: '#app',
   // 在此建立資料內容
 
-  // data: {
-  //   message: '哈囉'
-  // }
-})
+  data: {
+    message: '哈囉',
+    message2: "<h1>hello</h1>"
+  }
+});
+// v-model ： 藉由 v-model 來讓 input 標籤內的資料與 Script 中的 data 連動	
+// 		   此時 input 欄位就會有 data.message 的值，可以藉由修改 input
+// 		   的內容，連動更動 data.message 得值。
+
+// v-html：類似於 v-text 不過 v-html 是可以引入 html 標籤的參數的，以下面
+// 	      敘述為例，若將 v-text 及 v-model 的值改為 “message2” 兩者都 	
+// 	      會直接顯示 <h1>hello</h1> 在畫面上，而不是讓 hello 以 <h1> 的
+// 	      字體大小設定顯現在畫面上
+
+// v-text：藉由 v-text 在 div ( 區塊 ) 中塞入 data.message 的值
+
 </script> 
         </div>
       </div>

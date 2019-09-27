@@ -147,12 +147,27 @@
 </div>
 
 
-<div>
-
+<div id="app">
+  {{text}}
+</div>
+<div id="app2">
+    {{text2}}
 </div>
 
 
 <script>
+  var app = new Vue ({
+    el:"#app",
+    data:{
+      text: 'hello my name is Dylan chang'
+    }
+  });
+  var app2 = new Vue ({
+    el:"#app2",
+    data:{
+      text2: '巢狀結構的Vue會出現錯誤'
+    }
+  });
 // var data = {
 //   text: '這是一段話'
 // }
