@@ -150,40 +150,41 @@
     <div class="input-group-prepend">
       <span class="input-group-text" id="basic-addon1">待辦事項</span>
     </div>
-    <input type="text" class="form-control" placeholder="準備要做的任務">
+    <input type="text" class="form-control" placeholder="準備要做的任務" @keyup.enter="addTodo" v-model="newTodo">
     <div class="input-group-append">
-      <button class="btn btn-primary" type="button">新增</button>
+      <button class="btn btn-primary" type="button" @click="addTodo">新增</button>
     </div>
   </div>
   <div class="card text-center">
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
-          <a class="nav-link active" href="#">全部</a>
+          <a class="nav-link" :class="{ 'active' : visibility == 'all' }" @click=" visibility = 'all' " href="#">全部</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="#">進行中</a>
+          <a class="nav-link" :class="{ 'active' : visibility == 'ing' }" @click=" visibility = 'ing' " href="#">進行中</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">已完成</a>
+          <a class="nav-link" :class="{ 'active' : visibility == 'fin' }" @click=" visibility = 'fin' " href="#">已完成</a>
         </li>
       </ul>
     </div>
     <ul class="list-group list-group-flush text-left">
-      <li class="list-group-item">
-        <div class="d-flex">
+      <li class="list-group-item" v-for="(item, key) in filteredTodo" @dblclick="editTodo(item)">
+        <div class="d-flex" v-if="item.id !== catchTodo.id">
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="a1">
-            <label class="form-check-label" for="a1">
-              Cras justo odio
+            <input type="checkbox" class="form-check-input" v-model="item.completed" :id="item.id">
+            <label class="form-check-label" :class="{'completed' : item.completed }" :for="item.id">
+              {{item.todoMsg}} 
             </label>
           </div>
-          <button type="button" class="close ml-auto" aria-label="Close">
+          <button type="button" class="close ml-auto" @click="removetodo(key)" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        <input type="text" class="form-control" v-model="catchTitle" @keyup.esc="canceledit()" @keyup.enter="doneEdit(item)" v-if="item.id === catchTodo.id">
       </li>
-      <li class="list-group-item">
+      <!-- <li class="list-group-item">
         <div class="d-flex">
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="a1">
@@ -195,10 +196,10 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-      </li>
-      <li class="list-group-item">
+      </li> -->
+      <!-- <li class="list-group-item">
         <input type="text" class="form-control">
-      </li>
+      </li> -->
     </ul>
     <div class="card-footer d-flex justify-content-between">
       <span>還有 3 筆任務未完成</span>
@@ -210,7 +211,66 @@
 <script>
 var app = new Vue({
   el: '#app',
-  data: {},
+  data: {
+    newTodo:'',
+    todos:[],
+    catchTodo:{},
+    catchTitle:'',
+    visibility:'all'
+  },
+  methods: {
+    addTodo:function(){
+      let value = this.newTodo.trim();
+      let timestemp =Math.floor(Date.now());
+      if(!value){
+        return;
+      }
+      this.todos.push({
+        id:timestemp,
+        todoMsg:value,
+        completed:false
+      });
+      this.newTodo = '';
+    },
+    removetodo:function(key){
+      this.todos.splice(key,1);
+    },
+    editTodo:function(item){
+      this.catchTodo = item;
+      this.catchTitle = item.todoMsg;
+    },
+    canceledit:function(){
+      this.catchTodo = {};
+    },
+    doneEdit:function(item){
+      item.todoMsg = this.catchTitle;
+      this.catchTitle ='';
+      this.catchTodo = {};
+    }
+  },
+  computed:{
+    filteredTodo:function(){
+      if(this.visibility == 'all'){
+        return this.todos;
+      }else if(this.visibility == 'ing'){
+        let newtodos = [];
+        this.todos.forEach(function(item){
+          if(!item.completed){
+            newtodos.push(item);
+          }
+        });
+        return newtodos;
+      }else if(this.visibility == 'fin'){
+        let newtodos = [];
+        this.todos.forEach(function(item){
+          if(item.completed){
+            newtodos.push(item);
+          }
+        });
+        return newtodos;
+      }
+    }
+  }
 });
 </script>
 

@@ -148,7 +148,7 @@
   <input type="text" class="form-control" v-model="text">
   <button class="btn btn-primary mt-1">反轉字串</button>
   <div class="mt-3">
-    {{ text.split('').reverse().join('') }}
+    {{ textreverse }}
   </div>
 </div>
 
@@ -160,8 +160,18 @@ var app = new Vue({
     newText: ''
   },
   // 請在此撰寫 JavaScript
+  computed:{
+    textreverse : function(){
+      return this.text.split('').reverse().join('')
+    }
+  }
 });
 </script>
+
+<!-- computed 內物件一定為 function , 發條件需要有一個比對值
+
+ ——>v-model 連結 data.text
+ ——> function 內的 this.text 就是比對 v-model 內的 data.text -->
 
 <!-- 解答：
 computed: {
