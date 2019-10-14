@@ -123,17 +123,17 @@
   <h4>Key</h4>
   <p>請在範例上補上 key，並觀察其差異</p>
   <ul>
-    <li v-for="(item, key) in arrayData">
+    <li v-for="(item, key) in arrayData" :key="item.age">
       {{ key }} - {{ item.name }} {{ item.age }} 歲 <input type="text">
     </li>
   </ul>
-  <button class="btn btn-outline-primary">反轉陣列</button>
+  <button class="btn btn-outline-primary" @click="reverseArray">反轉陣列</button>
 
   <h4>Filter</h4>
   <p>請製作過濾資料</p>
-  <input type="text" class="form-control" v-model="filterText">
+  <input type="text" class="form-control" v-model="filterText" @keyup.enter="filterData">
   <ul>
-    <li v-for="(item, key) in arrayData" :key="item.age">
+    <li v-for="(item, key) in filterArray" :key="item.age">
       {{ key }} - {{ item.name }} {{ item.age }} 歲 <input type="text">
     </li>
   </ul>
@@ -224,33 +224,36 @@ var app = new Vue({
     // 請在此練習 JavaScript
 
     // 解答：
-    // reverseArray: function () {
-    //   this.arrayData.reverse()
-    //   console.log(this.arrayData)
-    // },
-    // filterData: function () {
-    //   var vm = this;
-    //   vm.filterArray = vm.arrayData.filter(function (item) {
-    //     console.log(vm.filterText, item.name, item.name.match(vm.filterText))
-    //     return item.name.match(vm.filterText);
-    //   });
-    // },
-    // cantWork: function () {
-    //   // // 情境一
-    //   // this.arrayData.length = 2;
+    reverseArray: function () {
+      this.arrayData.reverse()
+      console.log(this.arrayData)
+    },
+    filterData: function () {
+      var vm = this; //讓this指向vue應用程式
+      vm.filterArray = vm.arrayData.filter(function (item) {
+        console.log(vm.filterText, item.name, item.name.match(vm.filterText))
+        return item.name.match(vm.filterText);
+      });
+    },
+    cantWork: function () {
+      // // 情境一
+      // this.arrayData.length = 2;
+      //vue 不能直接強制修改陣列長度
 
-    //   // // 情境二
-    //   // this.arrayData[0] = {
-    //   //   name: '阿強',
-    //   //   age: 99
-    //   // }
-    //   // 解法
-    //   // Vue.set(this.arrayData, 0, {
-    //   //   name: '阿強',
-    //   //   age: 99
-    //   // })
-    //   console.log(this.arrayData)
-    // }
+      // // 情境二
+      // this.arrayData[0] = {
+      //   name: '阿強',
+      //   age: 99
+      // }
+      //vue 不能直接強制修改陣列內資料
+      // 解法
+      Vue.set(this.arrayData, 0, {
+        name: '阿強',
+        age: 99
+      })
+      //參考 vue.set 官方文件即可用vue 的方式修改資料
+      console.log(this.arrayData)
+    }
   }
 });
 </script>
